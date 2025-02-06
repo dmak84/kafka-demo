@@ -1,0 +1,35 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-cluster
+  namespace: kafka
+spec:
+  kafka:
+    version: 3.5.0
+    replicas: 3
+    listeners:
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+        authentication:
+          type: tls
+      - name: sasl-tls
+        port: 9094
+        type: internal
+        tls: true
+        authentication:
+          type: scram-sha-512
+    config:
+      inter.broker.protocol.version: "3.5"
+      security.inter.broker.protocol: "SASL_SSL"
+      sasl.enabled.mechanisms: "SCRAM-SHA-512"
+    storage:
+      type: ephemeral
+  zookeeper:
+    replicas: 3
+    storage:
+      type: ephemeral
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
