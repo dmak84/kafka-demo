@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: my-signed-cert
+  namespace: default
+spec:
+  secretName: my-signed-secret
+  duration: 90d
+  issuerRef:
+    name: my-ca-issuer
+    kind: Issuer
+  commonName: my-app.example.com
+  dnsNames:
+    - my-app.example.com
