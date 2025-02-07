@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: my-ca-cert
+  namespace: default  # Change this if needed
+spec:
+  isCA: true
+  commonName: my-ca
+  secretName: my-ca-secret
+  issuerRef:
+    name: selfsigned-ca-issuer
+    kind: ClusterIssuer
