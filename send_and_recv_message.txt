@@ -1,0 +1,11 @@
+sending message 
+
+https://docs.redhat.com/en/documentation/red_hat_streams_for_apache_kafka/2.8/html/getting_started_with_streams_for_apache_kafka_on_openshift/proc-using-amq-streams-str
+
+oc run kafka-producer -ti \
+--image=registry.redhat.io/amq-streams/kafka-38-rhel9:2.8.0 \
+--rm=true \
+--restart=Never \
+-- bin/kafka-console-producer.sh \
+--bootstrap-server my-cluster-kafka-bootstrap:9092 \
+--topic my-topic
