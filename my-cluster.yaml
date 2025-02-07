@@ -10,14 +10,24 @@ spec:
         port: 9093
         type: internal
         tls: true
+        # Enable SASL/SCRAM authentication on the TLS listener
         authentication:
-          type: tls
+          type: scram-sha-512
     config:
+      # Require clients to present a certificate (mTLS)
       ssl.client.auth: required
+      # Point Kafka to the custom truststore that contains all trusted client CAs
       ssl.truststore.location: "/opt/kafka/certificates/client-truststore.jks"
-      ssl.truststore.password: "${STRIMZI_TRUSTSTORE_PASSWORD}"  # Use env var
+      # The password is injected from an environment variable (see pod template)
+      ssl.truststore.password: "${STRIMZI_TRUSTSTORE_PASSWORD}"
+    storage:
+      type: persistent-claim
+      size: 100Gi
+      class: standard         # (Optional) Specify your storage class if needed.
+      deleteClaim: false      # Prevents deletion of the PVC when the Kafka CR is deleted.
     template:
       pod:
+        # Mount the custom truststore from a secret into the pod
         volumes:
           - name: custom-truststore
             secret:
@@ -27,8 +37,19 @@ spec:
             mountPath: "/opt/kafka/certificates"
             readOnly: true
         env:
+          # Inject the truststore password from a secret into the Kafka container
           - name: STRIMZI_TRUSTSTORE_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: kafka-truststore-password
                 key: truststore-password
+  zookeeper:
+    replicas: 3
+    storage:
+      type: persistent-claim
+      size: 50Gi
+      class: standard         # (Optional) Specify your storage class if needed.
+      deleteClaim: false      # Prevents deletion of the PVC when the Kafka CR is deleted.
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
