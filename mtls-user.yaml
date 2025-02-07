@@ -1,9 +1,14 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaUser
 metadata:
-  name: my-tls-user
+  name: my-scram-user
   labels:
     strimzi.io/cluster: my-cluster
 spec:
   authentication:
-    type: tls
+    type: scram-sha-512
+    # The following field tells the operator to use an existing secret.
+    scramSha512:
+      passwordSecret:
+        secretName: my-existing-password-secret
+        key: password
