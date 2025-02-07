@@ -2,10 +2,8 @@ apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
   name: my-cluster
-  namespace: kafka
 spec:
   kafka:
-    version: 3.5.0
     replicas: 3
     listeners:
       - name: tls
@@ -14,22 +12,23 @@ spec:
         tls: true
         authentication:
           type: tls
-      - name: sasl-tls
-        port: 9094
-        type: internal
-        tls: true
-        authentication:
-          type: scram-sha-512
     config:
-      inter.broker.protocol.version: "3.5"
-      security.inter.broker.protocol: "SASL_SSL"
-      sasl.enabled.mechanisms: "SCRAM-SHA-512"
-    storage:
-      type: ephemeral
-  zookeeper:
-    replicas: 3
-    storage:
-      type: ephemeral
-  entityOperator:
-    topicOperator: {}
-    userOperator: {}
+      ssl.client.auth: required
+      ssl.truststore.location: "/opt/kafka/certificates/client-truststore.jks"
+      ssl.truststore.password: "${STRIMZI_TRUSTSTORE_PASSWORD}"  # Use env var
+    template:
+      pod:
+        volumes:
+          - name: custom-truststore
+            secret:
+              secretName: kafka-custom-truststore
+        volumeMounts:
+          - name: custom-truststore
+            mountPath: "/opt/kafka/certificates"
+            readOnly: true
+        env:
+          - name: STRIMZI_TRUSTSTORE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: kafka-truststore-password
+                key: truststore-password
