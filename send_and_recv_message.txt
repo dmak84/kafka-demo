@@ -11,3 +11,9 @@ oc run kafka-producer -ti \
 --topic my-topic
 
 command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+
+security.protocol=SASL_SSL
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username=admin password=UGzYA2hddMqz;
+ssl.truststore.location=/tmp/truststore.jks
+ssl.truststore.password=truststorepassword
