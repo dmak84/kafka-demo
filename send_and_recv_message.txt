@@ -9,3 +9,5 @@ oc run kafka-producer -ti \
 -- bin/kafka-console-producer.sh \
 --bootstrap-server my-cluster-kafka-bootstrap:9092 \
 --topic my-topic
+
+command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
