@@ -1,12 +1,23 @@
 apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: selfsigned-ca
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: my-ca-cert
-  namespace: default  # Change this if needed
 spec:
-  isCA: true
-  commonName: my-ca
   secretName: my-ca-secret
+  commonName: "my-ca"
+  isCA: true
+  privateKey:
+    algorithm: RSA
+    size: 2048
+  duration: 8760h # 1 year
+  renewBefore: 720h # 30 days before expiry
   issuerRef:
-    name: selfsigned-ca-issuer
-    kind: ClusterIssuer
+    name: selfsigned-ca
+    kind: Issuer
