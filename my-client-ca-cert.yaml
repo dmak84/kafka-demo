@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: my-client-ca-cert
+spec:
+  secretName: my-client-ca-secret
+  commonName: "my-client-ca"
+  isCA: true
+  privateKey:
+    algorithm: RSA
+    size: 2048
+  duration: 8760h # 1 year
+  renewBefore: 720h # 30 days before expiry
+  issuerRef:
+    name: selfsigned-ca
+    kind: Issuer
