@@ -8,9 +8,14 @@ spec:
   renewBefore: 720h # 30 days before expiry
   commonName: "my-cluster"
   dnsNames:
+    - my-cluster-kafka-bootstrap
     - my-cluster-kafka-bootstrap.cmf-kafka
     - my-cluster-kafka-bootstrap.cmf-kafka.svc
-    - "my-cluster"
+    - my-cluster-kafka-bootstrap.cmf-kafka.svc.cluster.local
+    - my-cluster-kafka-external-bootstrap-cmf-kafka.apps.bo-ose-cmf-lab.micron.com
+    - *.my-cluster-kafka-brokers.cmf-kafka
+    - *.my-cluster-kafka-brokers.cmf-kafka.svc
+    - *.my-cluster-kafka-brokers.cmf-kafka.svc.cluster.local
   privateKey:
     algorithm: RSA
     size: 2048
