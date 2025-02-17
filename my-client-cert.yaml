@@ -1,9 +1,9 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: my-cluster-cert
+  name: my-client-cert
 spec:
-  secretName: my-cluster-secret
+  secretName: my-client-secret
   duration: 8760h # 1 year
   renewBefore: 720h # 30 days before expiry
   commonName: "my-cluster"
