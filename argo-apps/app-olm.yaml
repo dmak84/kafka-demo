@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/dmak84/kafka-demo.git
     targetRevision: main
-    path: olm
+    path: manifest/olm
   syncPolicy:
     automated:
       prune: true
