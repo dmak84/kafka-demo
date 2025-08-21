@@ -8,6 +8,13 @@ spec:
   replicas: 3
   roles:
     - broker
+  resources:
+    limits:
+        cpu: '1'
+        memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
   storage:
     type: jbod
     volumes:
