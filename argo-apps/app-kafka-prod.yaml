@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/dmak84/kafka-demo.git
     targetRevision: main
-    path: manifest/kafka/overlays/prod
+    path: manifests/kafka/overlays/prod
   syncPolicy:
     automated:
       prune: true
