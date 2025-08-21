@@ -20,4 +20,4 @@ patches:
         value: 1Gi
       - op: replace
         path: /spec/resources/limits/memory
-        value: 4Gi
+        value: 2Gi
