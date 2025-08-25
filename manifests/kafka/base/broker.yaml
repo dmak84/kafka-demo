@@ -42,7 +42,7 @@ spec:
       topologySpreadConstraints:
         - labelSelector:
             matchLabels:
-              strimzi.io/pool-name: kraft-controller
+              strimzi.io/pool-name: controller
           maxSkew: 1
           topologyKey: kubernetes.io/hostname
           whenUnsatisfiable: ScheduleAnyway
