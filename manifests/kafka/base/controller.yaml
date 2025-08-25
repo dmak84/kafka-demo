@@ -33,14 +33,16 @@ spec:
                     operator: Exists
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                strimzi.io/pool-name: broker
-            topologyKey: kubernetes.io/hostname
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    strimzi.io/pool-name: broker
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       topologySpreadConstraints:
         - labelSelector:
             matchLabels:
-              strimzi.io/pool-name: controller
+              strimzi.io/pool-name: broker
           maxSkew: 1
           topologyKey: kubernetes.io/hostname
           whenUnsatisfiable: ScheduleAnyway
