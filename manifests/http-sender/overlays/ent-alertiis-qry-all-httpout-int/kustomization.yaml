@@ -9,7 +9,7 @@ replacements:
 - source:
     fieldPath: metadata.name
     kind: ConfigMap
-    name: ent-alertiis-im-all-httpout-int
+    name: ent-alertiis-qry-all-httpout-int
   targets:
   - fieldPaths:
     - metadata.name
@@ -22,7 +22,7 @@ replacements:
 - source:
     fieldPath: metadata.namespace
     kind: ConfigMap
-    name: ent-alertiis-im-all-httpout-int
+    name: ent-alertiis-qry-all-httpout-int
   targets:
   - fieldPaths:
     - metadata.namespace
