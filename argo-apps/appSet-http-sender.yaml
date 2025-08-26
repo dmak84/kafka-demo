@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: http-sender-appset
+  namespace: argocd
+spec:
+  generators:
+    - directory:
+        # Path to the overlays relative to the repo root
+        path: http-sender/base/overlays
+        recurse: false
+  template:
+    metadata:
+      name: '{{path.basename}}'   # App name will be overlay folder name (app1, app2)
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/dmak84/kafka-demo.git
+        targetRevision: main
+        path: 'http-sender/base/overlays/{{path.basename}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
