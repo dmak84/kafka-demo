@@ -6,8 +6,8 @@ resources:
 
 images:
 - name: busybox
-  newName: hello
-  newTag: "1.2"
+  newName: busybox
+  newTag: "1.36"
 
 
 

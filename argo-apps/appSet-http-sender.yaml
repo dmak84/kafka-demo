@@ -5,10 +5,11 @@ metadata:
   namespace: openshift-gitops
 spec:
   generators:
-    - directory:
-        # Path to the overlays relative to the repo root
-        path: manifests/http-sender/overlays
-        recurse: false
+    - git:
+        repoURL: https://github.com/dmak84/kafka-demo.git
+        revision: HEAD
+        directories:
+          - path: manifests/http-sender/overlays/*
   template:
     metadata:
       name: '{{path.basename}}'   # App name will be overlay folder name (app1, app2)
