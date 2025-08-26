@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: http-sender-appset
-  namespace: argocd
+  namespace: openshift-gitops
 spec:
   generators:
     - directory:
@@ -20,7 +20,7 @@ spec:
         path: 'http-sender/base/overlays/{{path.basename}}'
       destination:
         server: 'https://kubernetes.default.svc'
-        namespace: '{{path.basename}}'
+        namespace: demo-dev
       syncPolicy:
         automated:
           prune: true
