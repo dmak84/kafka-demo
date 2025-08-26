@@ -3,12 +3,13 @@ kind: Kustomization
 
 resources:
   - deployment.yaml
-
+  
 images:
 - name: busybox
   newName: busybox
   newTag: "1.36"
 
-
+patchesStrategicMerge:
+  - patch-resources.yaml
 
   
