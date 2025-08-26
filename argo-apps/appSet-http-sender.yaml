@@ -7,7 +7,7 @@ spec:
   generators:
     - directory:
         # Path to the overlays relative to the repo root
-        path: manifests/http-sender/base/overlays
+        path: manifests/http-sender/overlays
         recurse: false
   template:
     metadata:
@@ -17,7 +17,7 @@ spec:
       source:
         repoURL: https://github.com/dmak84/kafka-demo.git
         targetRevision: main
-        path: 'manifests/http-sender/base/overlays/{{path.basename}}'
+        path: 'manifests/http-sender/overlays/{{path.basename}}'
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: demo-dev
