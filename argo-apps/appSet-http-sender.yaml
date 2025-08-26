@@ -7,7 +7,7 @@ spec:
   generators:
     - directory:
         # Path to the overlays relative to the repo root
-        path: http-sender/base/overlays
+        path: /manifests/http-sender/base/overlays
         recurse: false
   template:
     metadata:
