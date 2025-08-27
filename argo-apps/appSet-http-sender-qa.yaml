@@ -19,9 +19,16 @@ spec:
         repoURL: https://github.com/dmak84/kafka-demo.git
         targetRevision: main
         path: 'manifests/http-sender/overlays/{{path.basename}}'
+        kustomize:
+          components: 
+            - ../../components/deploy/qa
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: demo-dev
+      kustomize:
+        components: 
+          - ../../components/deploy/standby # relative to the kustomization.yaml (`source.path`).
+        ignoreMissingComponents: true
       syncPolicy:
         automated:
           prune: true
