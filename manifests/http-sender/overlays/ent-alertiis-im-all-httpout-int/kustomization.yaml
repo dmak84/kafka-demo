@@ -6,7 +6,7 @@ resources:
   - configmap.yaml
 
 components:
-  - ../../components/deploy/qa
+  - ../../components/deploy/dev
 
 replacements:
 - source:
