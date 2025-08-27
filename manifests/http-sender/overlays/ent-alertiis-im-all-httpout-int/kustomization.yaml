@@ -6,7 +6,7 @@ resources:
   - configmap.yaml
 
 components:
-  - ../../components/standby
+  - ../../components/deploy/qa
 
 replacements:
 - source:
