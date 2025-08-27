@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $(APP_NAME)
+  namespace: $(NAMESPACE)
+  labels:
+    app: $(APP_NAME)
+spec:
+  template:
+    spec:
+      containers:
+        - name: echo-message
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+            requests:
+              cpu: "1"
+              memory: "256Mi"

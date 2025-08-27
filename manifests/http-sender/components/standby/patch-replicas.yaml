@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $(APP_NAME)
+  namespace: $(NAMESPACE)
+  labels:
+    app: $(APP_NAME)
+spec:
+  replicas: 0
+
+
