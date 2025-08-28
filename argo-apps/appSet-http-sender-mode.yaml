@@ -4,6 +4,9 @@ metadata:
   name: http-sender-appset
   namespace: openshift-gitops
 spec:
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
   generators:
     - matrix:
         generators:
@@ -17,13 +20,13 @@ spec:
                 - path: manifests/http-sender/overlays/*
   template:
     metadata:
-      name: '{{path.basename}}'   # App name will be overlay folder name (app1, app2)
+      name: '{{.path.basenameNormalized}}'   # App name will be overlay folder name (app1, app2)
     spec:
       project: default
       source:
         repoURL: https://github.com/dmak84/kafka-demo.git
         targetRevision: main
-        path: 'manifests/http-sender/overlays/{{path.basename}}'
+        path: 'manifests/http-sender/overlays/{{.path.basenameNormalized}}'
         kustomize:
           components: 
             - '../../components/deploy/{{index .values "mode"}}'
