@@ -1,0 +1,95 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: grafana
+  namespace: grafana
+  labels:
+    dashboards: grafana
+    folders: grafana
+spec:
+  serviceAccount:
+    metadata:
+      name: grafana-sa
+      annotations:
+        serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"grafana-route"}}'
+  config:
+    log:
+      mode: "console"
+    auth:
+      disable_login_form: "False"
+      disable_signout_menu: "False"
+      signout_redirect_url: /oauth/sign_out
+    auth.basic:
+      enabled: "True"
+    security:
+      admin_user: admin
+      admin_password: adminadmin
+    auth.proxy:
+      enabled: "True"
+      header_name: X-Forwarded-User
+      header_property: username
+      auto_sign_up: "True"
+      sync_ttl: "60"
+      allow_assign_grafana_admin: "True"
+      # Only grafana-admins group gets Admin, all others Viewer
+      role_attribute_path: "contains(groups[*], 'grafana-admins') && 'Admin' || 'Viewer'"
+    users:
+      auto_assign_org: "True"
+      auto_assign_org_role: Viewer
+    server:
+      root_url: "%(protocol)s://%(domain)s/"
+      serve_from_sub_path: "True"
+  route:
+    spec:
+      port:
+        targetPort: https
+      tls:
+        termination: reencrypt
+      to:
+        kind: Service
+        name: grafana-service
+        weight: 100
+      wildcardPolicy: None
+  service:
+    metadata:
+      annotations:
+        service.beta.openshift.io/serving-cert-secret-name: grafana-tls
+    spec:
+      ports:
+        - name: https
+          port: 9091
+          targetPort: https
+  deployment:
+    spec:
+      template:
+        spec:
+          serviceAccountName: grafana-sa
+          containers:
+            - name: oauth-proxy
+              image: quay.io/openshift/origin-oauth-proxy:latest
+              args:
+                - --provider=openshift
+                - --https-address=:9091
+                - --http-address=
+                - --email-domain=*
+                - --upstream=http://localhost:3000
+                - --tls-cert=/etc/tls/private/tls.crt
+                - --tls-key=/etc/tls/private/tls.key
+                - --client-id=system:serviceaccount:grafana:grafana-sa
+                - --client-secret-file=/var/run/secrets/kubernetes.io/serviceaccount/token
+                - --cookie-secret=SECRET
+                - --openshift-service-account=grafana-sa
+                - --openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                - --skip-auth-regex=^/metrics
+                - --openshift-sar={"resource":"namespaces","verb":"get"}
+              ports:
+                - containerPort: 9091
+                  protocol: TCP
+                  name: https
+              volumeMounts:
+                - mountPath: /etc/tls/private
+                  name: tls-secret
+          volumes:
+            - name: tls-secret
+              secret:
+                secretName: grafana-tls

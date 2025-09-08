@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: update-grafana-datasource-token
+spec:
+  schedule: 0 0 * * *
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+            - name: datasource-config
+              configMap:
+                name: grafana-datasource-config  # Your configmap name
+                items:
+                  - key: prometheus-ds.yaml
+                    path: datasource.yaml
+            - name: output
+              emptyDir: {}
+          containers:
+          - name: token-creator
+            image: registry.redhat.io/openshift4/ose-cli:latest
+            command:
+            - /bin/bash
+            - -c
+            - |
+                echo "Starting token replacement..."
+                TOKEN=$(oc create token grafana-sa --duration=25h -n grafana)
+                sed "s|__BEARER_TOKEN__|${TOKEN}|g" /config/datasource.yaml > /output/ds.yaml
+                echo "Replacement done. Showing patched file:"
+                oc apply -f /output/ds.yaml
+            volumeMounts:
+              - name: datasource-config
+                mountPath: /config
+                readOnly: true
+              - name: output
+                mountPath: /output
