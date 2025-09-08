@@ -10,3 +10,7 @@ spec:
   source: community-operators
   sourceNamespace: openshift-marketplace
   startingCSV: grafana-operator.v5.19.4
+  config:
+    overrides:
+      - name: manager
+        image: quay.io/grafana-operator/grafana-operator:v5.19.4
